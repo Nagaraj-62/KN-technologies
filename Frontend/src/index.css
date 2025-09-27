@@ -1,0 +1,24 @@
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add this to the top of src/index.css */
+
+/* * {
+  border: 1px solid red;
+}
+do not import tailwind.min.css or anything else */
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* prevents horizontal scroll */
+  margin: 0;
+  padding: 0;
+}
+
