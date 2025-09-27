@@ -112,31 +112,28 @@
 //   );
 // }
 
-
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-// ✨ 1. Import Link and useLocation from react-router-dom
 import { Link, useLocation } from "react-router-dom";
 import KNLogo from "../assets/KN Logo.svg";
-import EnrollmentModal from "./EnrollmentModal";
+import EnrollmentModal from "../components/EnrollmentModal";
 
-// ✨ 2. Create a "smart" link component
-const SmartNavLink = ({ href, label, onClick }) => {
+// ✨ FIX: Updated SmartNavLink to accept and merge a className prop
+const SmartNavLink = ({ href, label, onClick, className = '' }) => {
   const location = useLocation();
   const isOnHomePage = location.pathname === '/';
+  const finalClassName = `hover:text-blue-400 transition duration-300 ${className}`;
 
-  // If we are on the homepage, use a regular anchor tag for smooth scrolling
   if (isOnHomePage) {
     return (
-      <a href={href} className="hover:text-blue-400 transition duration-300" onClick={onClick}>
+      <a href={href} className={finalClassName} onClick={onClick}>
         {label}
       </a>
     );
   }
 
-  // If we are on any other page, use a React Router Link to go back to the homepage first
   return (
-    <Link to={`/${href}`} className="hover:text-blue-400 transition duration-300" onClick={onClick}>
+    <Link to={`/${href}`} className={finalClassName} onClick={onClick}>
       {label}
     </Link>
   );
@@ -168,9 +165,9 @@ export default function Navbar() {
             <img
               src={KNLogo}
               alt="KN Logo"
-              className="h-12 w-auto "
+              className="h-12 w-auto [filter:brightness(0)_invert(1)]"
             />
-            <span className="hidden md:block text-sm text-blue-300 font-medium ">
+            <span className="hidden md:block text-sm text-blue-300 font-medium truncate max-w-[200px] lg:max-w-[240px]">
               Empowering Coders with Real Projects
             </span>
           </Link>
@@ -180,7 +177,6 @@ export default function Navbar() {
             <ul className="flex items-center space-x-4 lg:space-x-8 font-medium text-base">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  {/* ✨ 3. Use the new SmartNavLink component */}
                   <SmartNavLink href={link.href} label={link.label} />
                 </li>
               ))}
@@ -215,12 +211,13 @@ export default function Navbar() {
         >
           <div className="px-6 pt-4 pb-6 space-y-4 text-base">
             {navLinks.map((link) => (
-              // ✨ 4. Also use the SmartNavLink component in the mobile menu
+              // ✨ FIX: Passed 'block' class to make links stack vertically
               <SmartNavLink
                 key={link.href}
                 href={link.href}
                 label={link.label}
                 onClick={() => setIsNavOpen(false)}
+                className="block text-lg font-medium"
               />
             ))}
             <button
