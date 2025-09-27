@@ -96,8 +96,8 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Resources</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-blue-200 hover:text-blue-400 transition">Privacy Policy</a></li>
-              <li><a href="#" className="text-blue-200 hover:text-blue-400 transition">Terms of Service</a></li>
+              <li><a href="/privacy-policy" className="text-blue-200 hover:text-blue-400 transition">Privacy Policy</a></li>
+              <li><a href="/terms-of-service" className="text-blue-200 hover:text-blue-400 transition">Terms of Service</a></li>
             </ul>
           </div>
 
@@ -105,11 +105,11 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Get in Touch</h3>
             <a 
-              href="mailto:contact@kntechnicaltrainings.com"
+              href="mailto:kntechnologies.info@gmail.com"
               className="inline-flex items-center gap-2 text-blue-200 hover:text-blue-400 transition"
             >
               <Mail size={18} />
-              <span>contact@kntech.com</span>
+              <span>kntechnologies.info@gmail.com</span>
             </a>
           </div>
 

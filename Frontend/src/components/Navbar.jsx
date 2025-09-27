@@ -1,4 +1,3 @@
-
 // import { useState } from "react";
 // import { Menu, X } from "lucide-react";
 // import KNLogo from "../assets/KN Logo.svg";
@@ -22,28 +21,28 @@
 
 //   return (
 //     <>
-//       {/* Navbar */}
-//       <nav className="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-blue-900 via-blue-950 to-black text-white shadow-lg overflow-x-hidden">
+//       <nav className="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-blue-950 via-black to-blue-900 text-white shadow-lg">
 //         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8 h-20">
 //           {/* Logo */}
 //           <a
 //             href="/"
-//             className="flex-shrink-0 flex items-center gap-3 cursor-pointer overflow-hidden"
+//             className="flex-shrink-0 flex items-center gap-3 cursor-pointer"
 //           >
 //             <img
 //               src={KNLogo}
 //               alt="KN Logo"
-//               className="h-12 w-auto max-w-full "
+//               className="h-12 w-auto " // Assuming you want the white logo
 //             />
-//             {/* Hide long text unless screen is wide enough */}
-//             <span className="hidden lg:block text-sm text-blue-300 font-medium truncate max-w-[240px]">
+//             {/* ✨ FIX: Tagline now appears on medium screens (md) to match the nav links */}
+//             <span className="hidden md:block text-sm text-blue-300 font-medium truncate max-w-[200px] lg:max-w-[240px]">
 //               Empowering Coders with Real Projects
 //             </span>
 //           </a>
 
 //           {/* Desktop Nav + Enroll */}
-//           <div className="hidden md:flex items-center space-x-8">
-//             <ul className="flex space-x-8 font-medium text-base">
+//           <div className="hidden md:flex items-center flex-shrink-0">
+//             {/* ✨ FIX: Added responsive spacing for better fit on tablets */}
+//             <ul className="flex items-center space-x-4 lg:space-x-8 font-medium text-base">
 //               {navLinks.map((link) => (
 //                 <li key={link.href}>
 //                   <a
@@ -57,7 +56,7 @@
 //             </ul>
 //             <button
 //               onClick={handleEnrollClick}
-//               className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-md"
+//               className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 shadow-md ml-4 lg:ml-8"
 //             >
 //               Enroll Now
 //             </button>
@@ -112,10 +111,37 @@
 //     </>
 //   );
 // }
+
+
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+// ✨ 1. Import Link and useLocation from react-router-dom
+import { Link, useLocation } from "react-router-dom";
 import KNLogo from "../assets/KN Logo.svg";
 import EnrollmentModal from "./EnrollmentModal";
+
+// ✨ 2. Create a "smart" link component
+const SmartNavLink = ({ href, label, onClick }) => {
+  const location = useLocation();
+  const isOnHomePage = location.pathname === '/';
+
+  // If we are on the homepage, use a regular anchor tag for smooth scrolling
+  if (isOnHomePage) {
+    return (
+      <a href={href} className="hover:text-blue-400 transition duration-300" onClick={onClick}>
+        {label}
+      </a>
+    );
+  }
+
+  // If we are on any other page, use a React Router Link to go back to the homepage first
+  return (
+    <Link to={`/${href}`} className="hover:text-blue-400 transition duration-300" onClick={onClick}>
+      {label}
+    </Link>
+  );
+};
+
 
 export default function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -138,33 +164,24 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 z-50 w-full bg-gradient-to-r from-blue-950 via-black to-blue-900 text-white shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8 h-20">
           {/* Logo */}
-          <a
-            href="/"
-            className="flex-shrink-0 flex items-center gap-3 cursor-pointer"
-          >
+          <Link to="/" className="flex-shrink-0 flex items-center gap-3 cursor-pointer">
             <img
               src={KNLogo}
               alt="KN Logo"
-              className="h-12 w-auto [filter:brightness(0)_invert(1)]" // Assuming you want the white logo
+              className="h-12 w-auto "
             />
-            {/* ✨ FIX: Tagline now appears on medium screens (md) to match the nav links */}
-            <span className="hidden md:block text-sm text-blue-300 font-medium truncate max-w-[200px] lg:max-w-[240px]">
+            <span className="hidden md:block text-sm text-blue-300 font-medium ">
               Empowering Coders with Real Projects
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Nav + Enroll */}
           <div className="hidden md:flex items-center flex-shrink-0">
-            {/* ✨ FIX: Added responsive spacing for better fit on tablets */}
             <ul className="flex items-center space-x-4 lg:space-x-8 font-medium text-base">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="hover:text-blue-400 transition duration-300"
-                  >
-                    {link.label}
-                  </a>
+                  {/* ✨ 3. Use the new SmartNavLink component */}
+                  <SmartNavLink href={link.href} label={link.label} />
                 </li>
               ))}
             </ul>
@@ -198,14 +215,13 @@ export default function Navbar() {
         >
           <div className="px-6 pt-4 pb-6 space-y-4 text-base">
             {navLinks.map((link) => (
-              <a
+              // ✨ 4. Also use the SmartNavLink component in the mobile menu
+              <SmartNavLink
                 key={link.href}
                 href={link.href}
-                className="block text-lg font-medium hover:text-blue-400 transition"
+                label={link.label}
                 onClick={() => setIsNavOpen(false)}
-              >
-                {link.label}
-              </a>
+              />
             ))}
             <button
               onClick={handleEnrollClick}
