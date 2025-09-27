@@ -1,5 +1,5 @@
 [build]
-  base = "frontend"
+  base = "Frontend"   # <-- use capital F, exactly as your folder name
   command = "npm run build"
   publish = "dist"
 
